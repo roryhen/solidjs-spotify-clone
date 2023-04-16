@@ -1,0 +1,45 @@
+.controls {
+  display: flex;
+  gap: 8%;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-1);
+}
+
+.controls > :first-child {
+  margin-inline-end: auto;
+}
+
+.controls > :last-child {
+  margin-inline-start: auto;
+}
+
+.controls__btn:hover {
+  color: var(--brand);
+}
+
+.controls__icon--active {
+  color: var(--brand);
+}
+
+.controls__skip,
+.controls__play {
+  aspect-ratio: 1;
+  border: 2px solid currentColor;
+  border-radius: var(--radius-round);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.controls__skip {
+  flex: 0 3rem;
+}
+
+.controls__play {
+  flex: 0 4.5rem;
+}
+
+.controls__play .controls__icon {
+  margin-inline-start: 4%;
+}

@@ -1,0 +1,41 @@
+.app {
+  background: linear-gradient(160deg, var(--sand-2), var(--sand-4));
+}
+
+@media (prefers-color-scheme: dark) {
+  .app {
+    background: linear-gradient(160deg, var(--indigo-12), var(--gray-10));
+  }
+}
+
+.app__heading {
+  font-size: var(--font-size-0);
+}
+
+.app__panel {
+  padding: var(--size-4);
+  display: grid;
+  gap: var(--size-6);
+}
+
+@media (min-width: 30rem) {
+  .app__panel {
+    padding: var(--size-8);
+    grid-template: minmax(0, 1fr) / minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .app__panel > :first-child {
+    grid-area: span 2;
+  }
+}
+
+.app__controls {
+  display: grid;
+  gap: var(--size-6);
+}
+
+@media (min-width: 30rem) {
+  .app__controls {
+    gap: var(--size-3);
+  }
+}

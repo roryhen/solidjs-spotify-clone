@@ -1,0 +1,15 @@
+.bottombar {
+  display: flex;
+  gap: 10%;
+  align-items: center;
+  justify-content: flex-end;
+  color: var(--text-1);
+}
+
+.bottombar > :first-child {
+  margin-inline-end: auto;
+}
+
+.bottombar__icon:hover {
+  color: var(--brand);
+}

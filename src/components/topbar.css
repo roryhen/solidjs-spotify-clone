@@ -1,0 +1,10 @@
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--size-5) var(--size-3);
+  color: var(--text-1);
+}
+
+.topbar__icon:hover {
+  color: var(--brand);
+}
