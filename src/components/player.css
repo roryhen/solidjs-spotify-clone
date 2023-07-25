@@ -3,7 +3,6 @@
   inline-size: 100%;
   block-size: var(--size-1);
   border-radius: var(--radius-round);
-  border: none;
   cursor: pointer;
   --player-transparent: hsl(0 0% 0% / 30%);
   background: linear-gradient(

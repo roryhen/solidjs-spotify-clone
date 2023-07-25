@@ -1,12 +1,13 @@
-import type { Component, Setter } from "solid-js"
-import { createSignal } from "solid-js/types/reactive/signal"
+import type { Component, Setter, Accessor } from "solid-js"
 import "./player.css"
 
 type Props = {
-  currentTimeSeconds: number
-  totalTimeSeconds: number
-  audioSrc: string
+  currentTime: number
   setCurrentTime: Setter<number>
+  audioTrack: Accessor<HTMLAudioElement>
+  setAudioTrack: Setter<HTMLAudioElement>
+  duration: number
+  audioSrc: string
 }
 
 const secondsAsClock = (seconds: number) =>
@@ -15,19 +16,24 @@ const secondsAsClock = (seconds: number) =>
   }`
 
 export const Player: Component<Props> = (props) => {
-  const id = `range-input-${atob(props.audioSrc)}`
-  const currentTime = () => secondsAsClock(props.currentTimeSeconds)
-  const totalTime = () =>
-    secondsAsClock(props.totalTimeSeconds - props.currentTimeSeconds)
+  const currentTimeDisplay = () => secondsAsClock(props.currentTime)
+  const timeLeft = () => secondsAsClock(props.duration - props.currentTime)
   const progressPercentage = () =>
-    (props.currentTimeSeconds / props.totalTimeSeconds) * 100
-  const handleInput = (e: InputEvent) =>
-    props.setCurrentTime((e.currentTarget as HTMLInputElement).valueAsNumber)
+    ((props.currentTime / props.duration) * 100).toFixed(2)
+  const id = `range-input-${btoa(props.audioSrc).slice(0, 6)}`
+
+  const handleInput = (e: InputEvent) => {
+    const inputValue = (e.currentTarget as HTMLInputElement).valueAsNumber
+    props.setCurrentTime(inputValue)
+    props.audioTrack.currentTime = inputValue
+  }
 
   return (
     <div
       class="player"
-      style={{ "--player-progress": `${progressPercentage().toFixed(2)}%` }}
+      style={{
+        "--player-progress": `${progressPercentage()}%`,
+      }}
     >
       <label class="sr-only" for={id}>
         Audio Slider
@@ -37,16 +43,16 @@ export const Player: Component<Props> = (props) => {
         id={id}
         type="range"
         min="0"
-        max={props.totalTimeSeconds}
-        value={props.currentTimeSeconds}
+        max={props.duration}
+        value={props.currentTime}
         onInput={handleInput}
       />
-      <audio src={props.audioSrc} preload="metadata">
+      <audio ref={props.setAudioTrack} src={props.audioSrc} preload="metadata">
         <a href={props.audioSrc}>Download audio</a>
       </audio>
       <div class="player__timestamps">
-        <span>{currentTime()}</span>
-        <span>-{totalTime()}</span>
+        <span>{currentTimeDisplay()}</span>
+        <span>-{timeLeft()}</span>
       </div>
     </div>
   )

@@ -1,16 +1,30 @@
-import type { Component } from "solid-js"
+import "solid-devtools"
 import "./app.css"
+import type { Component } from "solid-js"
+import { createSignal, onMount, onCleanup } from "solid-js"
+import albumart from "./assets/albumart.svg"
 import { AlbumCover } from "./components/AlbumCover"
 import { TopBar } from "./components/TopBar"
 import { SongInfo } from "./components/SongInfo"
-import albumart from "./assets/albumart.svg"
 import { Player } from "./components/Player"
 import { Controls } from "./components/Controls"
-import { createSignal } from "solid-js"
 import { BottomBar } from "./components/BottomBar"
 
 export const App: Component = () => {
-  const [currentTime, setCurrentTime] = createSignal(5)
+  const [currentTime, setCurrentTime] = createSignal(0)
+  const [audioTrack, setAudioTrack] = createSignal<HTMLAudioElement>()
+
+  const timeUpdate = () => {
+    setCurrentTime(Math.floor(audioTrack().currentTime))
+  }
+
+  onMount(() => {
+    audioTrack().addEventListener("timeupdate", timeUpdate)
+
+    onCleanup(() => {
+      audioTrack().removeEventListener("timeupdate", timeUpdate)
+    })
+  })
 
   return (
     <div class="app">
@@ -22,13 +36,15 @@ export const App: Component = () => {
         <SongInfo title="Say That" artist="Toro y Moi" />
         <div class="app__controls">
           <Player
-            currentTimeSeconds={currentTime()}
-            totalTimeSeconds={120}
-            audioSrc={""}
+            currentTime={currentTime()}
             setCurrentTime={setCurrentTime}
+            audioTrack={audioTrack}
+            setAudioTrack={setAudioTrack}
+            duration={audioTrack() ? Math.floor(audioTrack().duration) : 0}
+            audioSrc="https://storage.googleapis.com/canofworms/audio/saythat-toroymoi.mp3"
           />
-          <Controls />
-          <BottomBar />
+          <Controls audioTrack={audioTrack()} />
+          <BottomBar audioTrack={audioTrack()} />
         </div>
       </div>
     </div>
