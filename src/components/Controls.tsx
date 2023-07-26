@@ -11,7 +11,7 @@ import {
 import "./controls.css"
 
 type Props = {
-  audioTrack: HTMLAudioElement
+  audioTrack?: HTMLAudioElement
 }
 
 export const Controls: Component<Props> = (props) => {
@@ -23,9 +23,9 @@ export const Controls: Component<Props> = (props) => {
 
   createEffect(() => {
     if (playing()) {
-      props.audioTrack.play()
+      props.audioTrack?.play()
     } else {
-      props.audioTrack.pause()
+      props.audioTrack?.pause()
     }
   })
 
@@ -35,10 +35,10 @@ export const Controls: Component<Props> = (props) => {
 
   onMount(() => {
     let track = props.audioTrack
-    track.addEventListener("ended", trackEnded)
+    track?.addEventListener("ended", trackEnded)
 
     onCleanup(() => {
-      track.removeEventListener("ended", trackEnded)
+      track?.removeEventListener("ended", trackEnded)
     })
   })
 
@@ -58,7 +58,7 @@ export const Controls: Component<Props> = (props) => {
         {playing() ? (
           <Pause class="controls__icon" />
         ) : (
-          <Play class="controls__icon" />
+          <Play class="controls__icon controls__icon--play" />
         )}
       </button>
       <button class="controls__btn controls__skip" type="button">

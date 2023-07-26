@@ -4,7 +4,7 @@ import { Divide, ListStart, MonitorSpeaker, Share, Volume2 } from "lucide-solid"
 import "./bottombar.css"
 
 type Props = {
-  audioTrack: HTMLAudioElement
+  audioTrack?: HTMLAudioElement
 }
 
 export const BottomBar: Component<Props> = (props) => {
@@ -12,7 +12,9 @@ export const BottomBar: Component<Props> = (props) => {
   const [volume, setVolume] = createSignal(1)
   const handleInput = (e: InputEvent) => {
     const inputValue = (e.currentTarget as HTMLInputElement).valueAsNumber
-    props.audioTrack.volume = inputValue
+    if (props.audioTrack) {
+      props.audioTrack.volume = inputValue
+    }
     setVolume(inputValue)
   }
 

@@ -40,6 +40,6 @@
   flex: 0 4.5rem;
 }
 
-.controls__play .controls__icon {
+.controls__icon--play {
   margin-inline-start: 4%;
 }

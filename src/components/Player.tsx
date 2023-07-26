@@ -1,13 +1,12 @@
-import type { Component, Setter, Accessor } from "solid-js"
+import type { Component, Setter } from "solid-js"
 import "./player.css"
 
 type Props = {
   currentTime: number
   setCurrentTime: Setter<number>
-  audioTrack: Accessor<HTMLAudioElement>
-  setAudioTrack: Setter<HTMLAudioElement>
-  duration: number
+  audioTrack?: HTMLAudioElement
   audioSrc: string
+  duration: number
 }
 
 const secondsAsClock = (seconds: number) =>
@@ -15,17 +14,21 @@ const secondsAsClock = (seconds: number) =>
     seconds % 60 < 10 ? `0${seconds % 60}` : seconds % 60
   }`
 
+const asPercentage = (number: number) => (number * 100).toFixed(2)
+
 export const Player: Component<Props> = (props) => {
   const currentTimeDisplay = () => secondsAsClock(props.currentTime)
   const timeLeft = () => secondsAsClock(props.duration - props.currentTime)
   const progressPercentage = () =>
-    ((props.currentTime / props.duration) * 100).toFixed(2)
+    asPercentage(props.currentTime / props.duration)
   const id = `range-input-${btoa(props.audioSrc).slice(0, 6)}`
 
   const handleInput = (e: InputEvent) => {
     const inputValue = (e.currentTarget as HTMLInputElement).valueAsNumber
     props.setCurrentTime(inputValue)
-    props.audioTrack.currentTime = inputValue
+    if (props.audioTrack) {
+      props.audioTrack.currentTime = inputValue
+    }
   }
 
   return (
@@ -47,9 +50,6 @@ export const Player: Component<Props> = (props) => {
         value={props.currentTime}
         onInput={handleInput}
       />
-      <audio ref={props.setAudioTrack} src={props.audioSrc} preload="metadata">
-        <a href={props.audioSrc}>Download audio</a>
-      </audio>
       <div class="player__timestamps">
         <span>{currentTimeDisplay()}</span>
         <span>-{timeLeft()}</span>
