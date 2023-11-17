@@ -9,13 +9,12 @@ type Props = {
 
 export const BottomBar: Component<Props> = (props) => {
   const [shown, setShown] = createSignal(false)
-  const [volume, setVolume] = createSignal(1)
+
   const handleInput = (e: InputEvent) => {
     const inputValue = (e.currentTarget as HTMLInputElement).valueAsNumber
     if (props.audioTrack) {
       props.audioTrack.volume = inputValue
     }
-    setVolume(inputValue)
   }
 
   const handleClick = () => {
@@ -38,7 +37,7 @@ export const BottomBar: Component<Props> = (props) => {
             min="0"
             max="1"
             step="0.01"
-            value={volume()}
+            value={props.audioTrack?.volume || 0.1}
             onInput={handleInput}
           />
         </div>

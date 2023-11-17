@@ -34,7 +34,7 @@ export const Controls: Component<Props> = (props) => {
   }
 
   onMount(() => {
-    let track = props.audioTrack
+    const track = props.audioTrack
     track?.addEventListener("ended", trackEnded)
 
     onCleanup(() => {

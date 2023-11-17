@@ -15,18 +15,28 @@ const audioSrc =
 
 export const App: Component = () => {
   const [currentTime, setCurrentTime] = createSignal(0)
+  const [duration, setDuration] = createSignal(0)
   const [audioTrack, setAudioTrack] = createSignal<HTMLAudioElement>()
 
   const timeUpdate = () => {
     setCurrentTime(Math.floor(audioTrack()?.currentTime || 0))
   }
 
+  const metadataUpdate = () => {
+    setDuration(Math.floor(audioTrack()?.duration || 0))
+  }
+
   onMount(() => {
     const track = audioTrack()
-    track?.addEventListener("timeupdate", timeUpdate)
+    if (track) {
+      track.volume = 0.1
+      track.addEventListener("timeupdate", timeUpdate)
+      track.addEventListener("loadedmetadata", metadataUpdate)
+    }
 
     onCleanup(() => {
       track?.removeEventListener("timeupdate", timeUpdate)
+      track?.addEventListener("loadedmetadata", metadataUpdate)
     })
   })
 
@@ -47,7 +57,7 @@ export const App: Component = () => {
             setCurrentTime={setCurrentTime}
             audioTrack={audioTrack()}
             audioSrc={audioSrc}
-            duration={284}
+            duration={duration()}
           />
           <Controls audioTrack={audioTrack()} />
           <BottomBar audioTrack={audioTrack()} />
